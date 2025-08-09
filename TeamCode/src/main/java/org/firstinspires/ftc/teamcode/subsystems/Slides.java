@@ -43,20 +43,19 @@ public class Slides extends Subsystem {
                 controller,
                 this);
     }
+    public Command manualControl(float power){
+        return new SetPower(slides, power, this);
+    }
     @Override
     public void periodic(){
         controller.setKP(kp);
-
-        //TODO: Use these to tune controller
+        //TODO: Use these when tuning PID controller
         //controller.calculate(slides.getLeader().getCurrentPosition(), target);
         //controller.setTarget(target);
-
 
         OpModeData.telemetry.addData("currentPos", slides.getLeader().getCurrentPosition());
         OpModeData.telemetry.addData("target", target);
         OpModeData.telemetry.update();
-
-
 
     }
 
