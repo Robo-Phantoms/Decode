@@ -5,9 +5,9 @@ import com.rowanmcalpin.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
 import com.rowanmcalpin.nextftc.ftc.OpModeData;
 import com.rowanmcalpin.nextftc.ftc.hardware.ServoToPosition;
+import org.firstinspires.ftc.teamcode.util.configurations;
 
 public class Elbows extends Subsystem {
-
     public static final Elbows INSTANCE = new Elbows();
     private Elbows() {}
 
@@ -15,19 +15,13 @@ public class Elbows extends Subsystem {
 
     public String elbow_2 = "elbow_2";
 
-    double rightElbowDownPosition = 0.675;
-    double rightElbowUpPosition = 1.0;
 
     public Command elbowDown(){
-        return new ServoToPosition(rightElbow,
-                rightElbowUpPosition,
-                this);
+        return new ServoToPosition(rightElbow, configurations.rightElbowUpPosition, this);
     }
 
     public Command elbowUp(){
-        return new ServoToPosition(rightElbow,
-                rightElbowDownPosition,
-                this);
+        return new ServoToPosition(rightElbow, configurations.rightElbowDownPosition, this);
     }
 
     @Override

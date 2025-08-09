@@ -12,6 +12,7 @@ import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorEx;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorGroup;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.RunToPosition;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.SetPower;
+import org.firstinspires.ftc.teamcode.util.configurations;
 
 @Config
 public class Slides extends Subsystem {
@@ -22,26 +23,19 @@ public class Slides extends Subsystem {
     public MotorEx leftSlide;
     public MotorEx rightSlide;
     public MotorGroup slides;
-    public static double kp = 0.01 , ki, kd, kf=0.08;
+    public static double kp = 0.01 , ki, kd, kf = 0.08;
     public static double target = 0;
-    public PIDFController controller = new PIDFController(kp, 0, 0, (v) -> kf);
+    public PIDFController controller = new PIDFController(kp, ki, kd, (v) -> kf);
 
     public String leftSlideName = "Slides";
     public String rightSlideName = "Slides2";
-    double slidesDownPosition = 0.0;
-    double slidesUpPosition = 4100;
+
 
     public Command slidesDown(){
-        return new RunToPosition(slides,
-                slidesDownPosition,
-                controller,
-                this);
+        return new RunToPosition(slides, configurations.slidesDownPosition, controller, this);
     }
     public Command slidesUp(){
-        return new RunToPosition(slides,
-                slidesUpPosition,
-                controller,
-                this);
+        return new RunToPosition(slides, configurations.slidesUpPosition, controller, this);
     }
     public Command manualControl(float power){
         return new SetPower(slides, power, this);
@@ -49,9 +43,9 @@ public class Slides extends Subsystem {
     @Override
     public void periodic(){
         controller.setKP(kp);
-        //TODO: Use these when tuning PID controller
-        //controller.calculate(slides.getLeader().getCurrentPosition(), target);
+        //TODO: Use these for tuning
         //controller.setTarget(target);
+        //controller.calculate(slides.getLeader().getCurrentPosition(), target);
 
         OpModeData.telemetry.addData("currentPos", slides.getLeader().getCurrentPosition());
         OpModeData.telemetry.addData("target", target);
@@ -62,17 +56,13 @@ public class Slides extends Subsystem {
     @Override
     @NonNull
     public Command getDefaultCommand(){
-        return new HoldPosition(slides,
-                controller,
-                this);
+        return new HoldPosition(slides, controller, this);
     }
 
     @Override
     public void initialize(){
-        leftSlide = new MotorEx(leftSlideName)
-                .reverse();
-        rightSlide = new MotorEx(rightSlideName)
-                .reverse();
+        leftSlide = new MotorEx(leftSlideName).reverse();
+        rightSlide = new MotorEx(rightSlideName).reverse();
         slides = new MotorGroup(leftSlide, rightSlide);
         leftSlide.resetEncoder();
     }

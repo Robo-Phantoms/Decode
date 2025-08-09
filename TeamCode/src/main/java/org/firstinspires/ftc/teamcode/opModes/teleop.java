@@ -37,6 +37,7 @@ public class teleop extends NextFTCOpMode {
     boolean isClawOpen = false;
     boolean isElbowUp = false;
 
+
     @Override
     public void onInit() {
         leftFront = new MotorEx(frontLeftName);
@@ -54,6 +55,7 @@ public class teleop extends NextFTCOpMode {
         rightMotors = new MotorGroup(rightFront, rightBack);
 
 
+
     }
 
     @Override
@@ -61,18 +63,7 @@ public class teleop extends NextFTCOpMode {
         driverControlled = new DifferentialTankDriverControlled(leftMotors, rightMotors, gamepadManager.getGamepad1());
         driverControlled.invoke();
 
-        if (gamepad1.right_bumper) {
-            leftFront.setPower(0.75);
-            leftBack.setPower(-0.75);
-            rightFront.setPower(0.75);
-            rightBack.setPower(-0.75);
-        } else if (gamepad1.left_bumper) {
-            leftFront.setPower(-0.75);
-            leftBack.setPower(0.75);
-            rightFront.setPower(-0.75);
-            rightBack.setPower(0.75);
-        }
-
+        setGamePad1Commands();
         setGamePad2Commands();
     }
     public void setGamePad2Commands(){
@@ -104,19 +95,26 @@ public class teleop extends NextFTCOpMode {
                         )
 
                 ));
-        //Slides Commands
-        gamepadManager.getGamepad2().getDpadUp().setPressedCommand(Slides.INSTANCE::slidesUp);
-        gamepadManager.getGamepad2().getDpadDown().setPressedCommand(Slides.INSTANCE::slidesDown);
 
         gamepadManager.getGamepad2().getA().setPressedCommand(() ->
                 new SequentialGroup(
-                        Slides.INSTANCE.slidesUp(),
+                        Elbows.INSTANCE.elbowDown(),
+                        Claw.INSTANCE.spunPosition()
+                )
+        );
+        gamepadManager.getGamepad2().getY().setPressedCommand(() ->
+                new SequentialGroup(
                         Elbows.INSTANCE.elbowUp(),
-                        Claw.INSTANCE.openClawCommand()
+                        Claw.INSTANCE.notSpunPosition()
                 )
         );
 
-        //Actuator Commands
+        //Slides Commands
+        gamepadManager.getGamepad2().getDpadUp().setPressedCommand(Slides.INSTANCE::slidesUp);
+        gamepadManager.getGamepad2().getDpadDown().setPressedCommand(Slides.INSTANCE::slidesDown);
+    }
+
+    public void setGamePad1Commands(){
         gamepadManager.getGamepad1().getLeftTrigger().setPressedCommand(
                 value -> Actuators.INSTANCE.actuatorsDown()
         );
@@ -129,9 +127,6 @@ public class teleop extends NextFTCOpMode {
         gamepadManager.getGamepad1().getRightTrigger().setReleasedCommand(
                 value  -> Actuators.INSTANCE.actuatorsStop()
         );
-
-
-
     }
     @Override
     public void onUpdate(){
@@ -146,7 +141,6 @@ public class teleop extends NextFTCOpMode {
             rightFront.setPower(-0.75);
             rightBack.setPower(0.75);
         }
-
         if(gamepad1.a){
            leftFront.setPower(-0.3);
            leftBack.setPower(-0.3);

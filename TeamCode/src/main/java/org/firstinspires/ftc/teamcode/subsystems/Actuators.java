@@ -6,6 +6,8 @@ import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorEx;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorGroup;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.SetPower;
 
+import org.firstinspires.ftc.teamcode.util.configurations;
+
 public class Actuators extends Subsystem {
     public static final Actuators INSTANCE = new Actuators();
     private Actuators() {}
@@ -15,14 +17,16 @@ public class Actuators extends Subsystem {
     public String Act1Name = "Act1";
     public String Act2Name = "Act2";
 
+
+
     public Command actuatorsUp(){
-        return new SetPower(Actuators, 1, this);
+        return new SetPower(Actuators, configurations.actuatorUpPower, this);
     }
     public Command actuatorsDown(){
-        return new SetPower(Actuators, -1, this);
+        return new SetPower(Actuators, configurations.actuatorDownPower, this);
     }
     public Command actuatorsStop(){
-        return new SetPower(Actuators, 0, this);
+        return new SetPower(Actuators, configurations.actuatorStopPower, this);
     }
 
     @Override

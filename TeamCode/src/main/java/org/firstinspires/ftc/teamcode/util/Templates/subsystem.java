@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.Templates;
+package org.firstinspires.ftc.teamcode.util.Templates;
 
 import com.rowanmcalpin.nextftc.core.Subsystem;
-
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
 public class subsystem extends Subsystem {
     //Boilerplate
