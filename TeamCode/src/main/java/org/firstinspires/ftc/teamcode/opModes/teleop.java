@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opModes;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.rowanmcalpin.nextftc.core.command.Command;
+import com.rowanmcalpin.nextftc.core.command.groups.ParallelGroup;
 import com.rowanmcalpin.nextftc.core.command.groups.SequentialGroup;
 import com.rowanmcalpin.nextftc.core.command.utility.InstantCommand;
 import com.rowanmcalpin.nextftc.core.command.utility.conditionals.PassiveConditionalCommand;
@@ -67,7 +68,6 @@ public class teleop extends NextFTCOpMode {
         setGamePad2Commands();
     }
     public void setGamePad2Commands(){
-
         //Claw Toggle
         gamepadManager.getGamepad2().getX().setPressedCommand(() ->
                 new SequentialGroup(
@@ -82,7 +82,6 @@ public class teleop extends NextFTCOpMode {
                 )
         );
 
-        //Elbow Toggle
         gamepadManager.getGamepad2().getB().setPressedCommand(() ->
                 new SequentialGroup(
                         new InstantCommand(() -> {
@@ -93,23 +92,15 @@ public class teleop extends NextFTCOpMode {
                                 () -> Elbows.INSTANCE.elbowUp(),
                                 () -> Elbows.INSTANCE.elbowDown()
                         )
-
                 ));
 
         gamepadManager.getGamepad2().getA().setPressedCommand(() ->
-                new SequentialGroup(
-                        Elbows.INSTANCE.elbowDown(),
-                        Claw.INSTANCE.spunPosition()
-                )
+                new ParallelGroup(Elbows.INSTANCE.elbowDown(), Claw.INSTANCE.spunPosition())
         );
         gamepadManager.getGamepad2().getY().setPressedCommand(() ->
-                new SequentialGroup(
-                        Elbows.INSTANCE.elbowUp(),
-                        Claw.INSTANCE.notSpunPosition()
-                )
+                new ParallelGroup(Elbows.INSTANCE.elbowUp(), Claw.INSTANCE.notSpunPosition())
         );
 
-        //Slides Commands
         gamepadManager.getGamepad2().getDpadUp().setPressedCommand(Slides.INSTANCE::slidesUp);
         gamepadManager.getGamepad2().getDpadDown().setPressedCommand(Slides.INSTANCE::slidesDown);
     }
@@ -154,6 +145,4 @@ public class teleop extends NextFTCOpMode {
             rightBack.setPower(0.3);
         }
     }
-
-
 }
