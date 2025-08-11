@@ -6,9 +6,11 @@ import com.rowanmcalpin.nextftc.core.command.Command;
 import com.rowanmcalpin.nextftc.core.command.groups.ParallelGroup;
 import com.rowanmcalpin.nextftc.core.command.groups.SequentialGroup;
 import com.rowanmcalpin.nextftc.core.command.utility.InstantCommand;
+import com.rowanmcalpin.nextftc.core.command.utility.LambdaCommand;
 import com.rowanmcalpin.nextftc.core.command.utility.conditionals.PassiveConditionalCommand;
 import com.rowanmcalpin.nextftc.ftc.NextFTCOpMode;
 import com.rowanmcalpin.nextftc.ftc.driving.DifferentialTankDriverControlled;
+import com.rowanmcalpin.nextftc.ftc.hardware.Drivetrain;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorEx;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorGroup;
 
@@ -31,6 +33,7 @@ public class teleop extends NextFTCOpMode {
     public MotorEx leftBack;
     public MotorEx rightBack;
     public Command driverControlled;
+    //public LambdaCommand strafeLeft;
     public MotorGroup leftMotors;
     public MotorGroup rightMotors;
 
@@ -63,6 +66,19 @@ public class teleop extends NextFTCOpMode {
     public void onStartButtonPressed(){
         driverControlled = new DifferentialTankDriverControlled(leftMotors, rightMotors, gamepadManager.getGamepad1());
         driverControlled.invoke();
+        /*strafeLeft = new LambdaCommand()
+                .setUpdate(() -> {
+                    leftFront.setPower(0.75);
+                    leftBack.setPower(-0.75);
+                    rightFront.setPower(0.75);
+                    rightBack.setPower(-0.75);
+                })
+                .setStop(interrupted -> {
+                    leftFront.setPower(0);
+                    leftBack.setPower(0);
+                    rightFront.setPower(0);
+                    rightBack.setPower(0);
+                });*/
 
         setGamePad1Commands();
         setGamePad2Commands();
@@ -118,6 +134,7 @@ public class teleop extends NextFTCOpMode {
         gamepadManager.getGamepad1().getRightTrigger().setReleasedCommand(
                 value  -> Actuators.INSTANCE.actuatorsStop()
         );
+        //gamepadManager.getGamepad1().getLeftBumper().setHeldCommand(() -> strafeLeft);
     }
     @Override
     public void onUpdate(){
