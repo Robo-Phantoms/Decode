@@ -12,6 +12,8 @@ import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorEx;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorGroup;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.RunToPosition;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.SetPower;
+import com.rowanmcalpin.nextftc.ftc.hardware.controllables.VoltageCompensatingMotor;
+
 import org.firstinspires.ftc.teamcode.util.configurations;
 
 @Config
