@@ -24,10 +24,10 @@ public class TeleopWithOnlyDrive extends NextFTCOpMode {
         );
     }
 
-    public MotorEx leftFront;
-    public MotorEx rightFront;
-    public MotorEx leftBack;
-    public MotorEx rightBack;
+    private MotorEx leftFront;
+    private MotorEx rightFront;
+    private MotorEx leftBack;
+    private MotorEx rightBack;
     public MotorGroup leftMotors;
     public MotorGroup rightMotors;
 
