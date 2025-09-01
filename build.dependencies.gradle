@@ -8,6 +8,7 @@ repositories {
 dependencies {
     implementation 'org.firstinspires.ftc:Inspection:10.3.0'
     implementation 'org.firstinspires.ftc:Blocks:10.3.0'
+    //noinspection Aligned16KB
     implementation 'org.firstinspires.ftc:RobotCore:10.3.0'
     implementation 'org.firstinspires.ftc:RobotServer:10.3.0'
     implementation 'org.firstinspires.ftc:OnBotJava:10.3.0'
@@ -15,8 +16,8 @@ dependencies {
     implementation 'org.firstinspires.ftc:FtcCommon:10.3.0'
     implementation 'org.firstinspires.ftc:Vision:10.3.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.rowanmcalpin.nextftc:core:0.6.1'
-    implementation 'com.rowanmcalpin.nextftc:ftc:0.6.1'
-    implementation 'com.rowanmcalpin.nextftc:pedro:0.6.1'
+    implementation 'dev.nextftc:ftc:1.0.0-beta.3'
+    implementation 'dev.nextftc:hardware:1.0.0-beta.3'
+    implementation 'dev.nextftc:control:1.0.0-beta.3'
 }
 
