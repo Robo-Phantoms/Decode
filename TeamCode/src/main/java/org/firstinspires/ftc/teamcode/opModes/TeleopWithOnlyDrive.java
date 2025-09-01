@@ -1,18 +1,14 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
-import androidx.annotation.RequiresPermission;
-
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.core.commands.utility.LambdaCommand;
+import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.driving.DifferentialTankDriverControlled;
-import dev.nextftc.hardware.driving.MecanumDriverControlled;
 import dev.nextftc.hardware.impl.MotorEx;
 import org.firstinspires.ftc.teamcode.util.*;
 
@@ -20,7 +16,13 @@ import org.firstinspires.ftc.teamcode.util.*;
 @TeleOp(name="TeleopWithOnlyDrive")
 public class TeleopWithOnlyDrive extends NextFTCOpMode {
 
-    public TeleopWithOnlyDrive(){}
+    public TeleopWithOnlyDrive(){
+        addComponents(
+                BulkReadComponent.INSTANCE,
+                BindingsComponent.INSTANCE
+
+        );
+    }
 
     public MotorEx leftFront;
     public MotorEx rightFront;
