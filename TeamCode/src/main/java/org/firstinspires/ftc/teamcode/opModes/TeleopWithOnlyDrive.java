@@ -28,8 +28,8 @@ public class TeleopWithOnlyDrive extends NextFTCOpMode {
     private MotorEx rightFront;
     private MotorEx leftBack;
     private MotorEx rightBack;
-    public MotorGroup leftMotors;
-    public MotorGroup rightMotors;
+    private MotorGroup leftMotors;
+    private MotorGroup rightMotors;
 
     @Override
     public void onInit() {
@@ -53,5 +53,4 @@ public class TeleopWithOnlyDrive extends NextFTCOpMode {
                 .whenTrue(() -> ExtraCommands.strafeRight(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> ExtraCommands.stop(leftFront, rightFront, leftBack, rightBack));
     }
-
 }

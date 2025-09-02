@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.hardware.controllable.Controllable;
+
+/**
+ * @Param Use this class for extra commands that can't be put in subsystems
+ */
 
 public class ExtraCommands {
     public static double STRAFE_POWER = 0.75;
