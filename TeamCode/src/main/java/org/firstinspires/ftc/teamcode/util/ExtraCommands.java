@@ -22,8 +22,8 @@ public class ExtraCommands {
     }
 
     public static void stop(Controllable lf, Controllable rf, Controllable lb, Controllable rb) {
-        lf.setPower(0);
         rf.setPower(0);
+        lf.setPower(0);
         lb.setPower(0);
         rb.setPower(0);
     }
