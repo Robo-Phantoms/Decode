@@ -52,5 +52,11 @@ public class TeleopWithOnlyDrive extends NextFTCOpMode {
         Gamepads.gamepad2().rightBumper()
                 .whenTrue(() -> ExtraCommands.strafeRight(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> ExtraCommands.stop(leftFront, rightFront, leftBack, rightBack));
+        Gamepads.gamepad2().y()
+                .whenTrue(() -> ExtraCommands.forward(leftFront, rightFront, leftBack, rightBack))
+                .whenBecomesFalse(() -> ExtraCommands.stop(leftFront, rightFront, leftBack, rightBack));
+        Gamepads.gamepad2().a()
+                .whenTrue(() -> ExtraCommands.backward(leftFront, rightFront, leftBack, rightBack))
+                .whenBecomesFalse(() -> ExtraCommands.stop(leftFront, rightFront, leftBack, rightBack));
     }
 }

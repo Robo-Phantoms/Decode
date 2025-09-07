@@ -7,20 +7,20 @@ import dev.nextftc.hardware.controllable.Controllable;
  */
 
 public class ExtraCommands {
-    public static double STRAFE_POWER = 0.75;
+    public static double POWER = 0.75;
 
     public static void strafeLeft(Controllable lfMotor, Controllable rfMotor, Controllable lbMotor, Controllable rbMotor) {
-        rfMotor.setPower(STRAFE_POWER);
-        lfMotor.setPower(-STRAFE_POWER);
-        lbMotor.setPower(STRAFE_POWER);
-        rbMotor.setPower(-STRAFE_POWER);
+        rfMotor.setPower(POWER);
+        lfMotor.setPower(-POWER);
+        lbMotor.setPower(POWER);
+        rbMotor.setPower(-POWER);
     }
 
     public static void strafeRight(Controllable lfMotor, Controllable rfMotor, Controllable lbMotor, Controllable rbMotor) {
-        rfMotor.setPower(-STRAFE_POWER);
-        lfMotor.setPower(STRAFE_POWER);
-        lbMotor.setPower(-STRAFE_POWER);
-        rbMotor.setPower(STRAFE_POWER);
+        rfMotor.setPower(-POWER);
+        lfMotor.setPower(POWER);
+        lbMotor.setPower(-POWER);
+        rbMotor.setPower(POWER);
     }
 
     public static void stop(Controllable lf, Controllable rf, Controllable lb, Controllable rb) {
@@ -29,4 +29,19 @@ public class ExtraCommands {
         lb.setPower(0);
         rb.setPower(0);
     }
+
+    public static void forward(Controllable lf, Controllable rf, Controllable lb, Controllable rb) {
+        rf.setPower(POWER);
+        lf.setPower(POWER);
+        lb.setPower(POWER);
+        rb.setPower(POWER);
+    }
+
+    public static void backward(Controllable lf, Controllable rf, Controllable lb, Controllable rb) {
+        rf.setPower(-POWER);
+        lf.setPower(-POWER);
+        lb.setPower(-POWER);
+        rb.setPower(-POWER);
+    }
+
 }
