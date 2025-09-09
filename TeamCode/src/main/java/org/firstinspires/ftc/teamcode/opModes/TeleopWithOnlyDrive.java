@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opModes;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
@@ -20,7 +21,6 @@ public class TeleopWithOnlyDrive extends NextFTCOpMode {
         addComponents(
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE
-
         );
     }
 
@@ -43,8 +43,7 @@ public class TeleopWithOnlyDrive extends NextFTCOpMode {
 
     @Override
     public void onStartButtonPressed() {
-        Command driverControlled = new DifferentialTankDriverControlled(leftMotors, rightMotors, Gamepads.gamepad1().leftStickY(), Gamepads.gamepad1().rightStickY());
-        driverControlled.schedule();
+        Command driverControlled = new DifferentialTankDriverControlled(leftMotors, rightMotors, Gamepads.gamepad1().leftStickY(), Gamepads.gamepad1().rightStickY());        driverControlled.schedule();
 
         Gamepads.gamepad2().leftBumper()
                 .whenTrue(() -> ExtraCommands.strafeLeft(leftFront, rightFront, leftBack, rightBack))
