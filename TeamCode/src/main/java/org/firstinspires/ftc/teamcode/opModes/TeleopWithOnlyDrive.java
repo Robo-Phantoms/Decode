@@ -45,16 +45,16 @@ public class TeleopWithOnlyDrive extends NextFTCOpMode {
     public void onStartButtonPressed() {
         Command driverControlled = new DifferentialTankDriverControlled(leftMotors, rightMotors, Gamepads.gamepad1().leftStickY(), Gamepads.gamepad1().rightStickY());        driverControlled.schedule();
 
-        Gamepads.gamepad2().leftBumper()
+        Gamepads.gamepad1().leftBumper()
                 .whenTrue(() -> ExtraCommands.strafeLeft(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> ExtraCommands.stop(leftFront, rightFront, leftBack, rightBack));
-        Gamepads.gamepad2().rightBumper()
+        Gamepads.gamepad1().rightBumper()
                 .whenTrue(() -> ExtraCommands.strafeRight(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> ExtraCommands.stop(leftFront, rightFront, leftBack, rightBack));
-        Gamepads.gamepad2().y()
+        Gamepads.gamepad1().y()
                 .whenTrue(() -> ExtraCommands.forward(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> ExtraCommands.stop(leftFront, rightFront, leftBack, rightBack));
-        Gamepads.gamepad2().a()
+        Gamepads.gamepad1().a()
                 .whenTrue(() -> ExtraCommands.backward(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> ExtraCommands.stop(leftFront, rightFront, leftBack, rightBack));
     }
