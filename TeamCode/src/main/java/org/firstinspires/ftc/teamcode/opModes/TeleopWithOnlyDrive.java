@@ -18,10 +18,7 @@ import org.firstinspires.ftc.teamcode.util.*;
 public class TeleopWithOnlyDrive extends NextFTCOpMode {
 
     public TeleopWithOnlyDrive(){
-        addComponents(
-                BulkReadComponent.INSTANCE,
-                BindingsComponent.INSTANCE
-        );
+        addComponents(BulkReadComponent.INSTANCE, BindingsComponent.INSTANCE);
     }
 
     private MotorEx leftFront;
