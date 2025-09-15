@@ -7,7 +7,7 @@ import dev.nextftc.hardware.controllable.Controllable;
  */
 
 public class ExtraCommands {
-    public static double POWER = 0.75;
+    public static double POWER = 0.55;
 
     public static void strafeLeft(Controllable lfMotor, Controllable rfMotor, Controllable lbMotor, Controllable rbMotor) {
         rfMotor.setPower(POWER);
@@ -31,17 +31,16 @@ public class ExtraCommands {
     }
 
     public static void forward(Controllable lf, Controllable rf, Controllable lb, Controllable rb) {
-        rf.setPower(POWER);
-        lf.setPower(POWER);
-        lb.setPower(POWER);
-        rb.setPower(POWER);
-    }
-
-    public static void backward(Controllable lf, Controllable rf, Controllable lb, Controllable rb) {
         rf.setPower(-POWER);
         lf.setPower(-POWER);
         lb.setPower(-POWER);
         rb.setPower(-POWER);
     }
 
+    public static void backward(Controllable lf, Controllable rf, Controllable lb, Controllable rb) {
+        rf.setPower(POWER);
+        lf.setPower(POWER);
+        lb.setPower(POWER);
+        rb.setPower(POWER);
+    }
 }

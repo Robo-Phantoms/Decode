@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
@@ -25,29 +23,21 @@ public class VelocityTest extends NextFTCOpMode {
                 BulkReadComponent.INSTANCE
         );
     }
-    private MotorEx compliantWheelLeft;
-    private MotorEx compliantWheelRight;
-    private MotorGroup Wheels;
-    private ControlSystem controller;
+    private MotorEx compliantWheelLeft = new MotorEx("left").reversed();
+    private MotorEx compliantWheelRight = new MotorEx("right");
+
+    private MotorGroup Wheels = new MotorGroup(compliantWheelLeft, compliantWheelRight);
     public static double kp, ki, kd;
     public static double kv, ka, ks;
-    public static double target;
-    @Override
-    public void onInit(){
-        compliantWheelLeft = new MotorEx("left").reversed();
-        compliantWheelRight = new MotorEx("right");
-        Wheels = new MotorGroup(compliantWheelLeft, compliantWheelRight);
-
-        controller = ControlSystem.builder()
-                .velPid(kp, ki, kd)
-                .basicFF(kv, ks, ka)
-                .build();
-
-    }
+    public static double targetVel;
+    public static ControlSystem controller = ControlSystem.builder()
+            .velPid(kp, ki, kd)
+            .basicFF(kv, ks, ka)
+            .build();
 
     @Override
     public void onStartButtonPressed(){
-        Gamepads.gamepad1().a().whenTrue(() -> controller.setGoal(new KineticState(0.0, target, 0.0)));
+        Gamepads.gamepad1().a().whenTrue(() -> controller.setGoal(new KineticState(0.0, targetVel, 0.0)));
     }
 
     @Override
@@ -60,5 +50,6 @@ public class VelocityTest extends NextFTCOpMode {
         ActiveOpMode.telemetry().addData("currentVel", Wheels.getVelocity());
         ActiveOpMode.telemetry().addData("power", power);
         ActiveOpMode.telemetry().update();
+
     }
 }
