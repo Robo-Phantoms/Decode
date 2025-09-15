@@ -16,8 +16,4 @@ public class Intake implements Subsystem {
     public Command stopIntake(){
         return new SetPower(rightIntake, 0.0);
     }
-
-
-
-
 }
