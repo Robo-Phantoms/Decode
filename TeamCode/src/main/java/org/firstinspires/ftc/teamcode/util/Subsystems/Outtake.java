@@ -11,9 +11,9 @@ public class Outtake implements Subsystem {
     public static Outtake INSTANCE = new Outtake();
     private Outtake() {}
 
-    private MotorEx leftWheel = new MotorEx("leftWheel").reversed();
-    private MotorEx rightWheel = new MotorEx("rightWheel");
-    private MotorGroup outtakeWheels = new MotorGroup(leftWheel, rightWheel);
+    private MotorEx leftFlyWheel = new MotorEx("leftFlyWheel").reversed();
+    private MotorEx rightFlyWheel = new MotorEx("rightFlyWheel");
+    private MotorGroup flyWheelOuttake = new MotorGroup(leftFlyWheel, rightFlyWheel);
     public static double kp, ki, kd;
     public static double kv, ka, ks;
 
@@ -27,7 +27,7 @@ public class Outtake implements Subsystem {
 
     @Override
     public void periodic(){
-        outtakeWheels.setPower(controller.calculate(outtakeWheels.getState()));
+        flyWheelOuttake.setPower(controller.calculate(flyWheelOuttake.getState()));
     }
 
 }
