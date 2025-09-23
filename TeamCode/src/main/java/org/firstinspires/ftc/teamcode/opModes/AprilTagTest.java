@@ -28,16 +28,23 @@ public class AprilTagTest extends OpMode {
 
     @Override
     public void init() {
+        WebcamName webCam = hardwareMap.get(WebcamName.class, "Webcam");
         aprilTagProcessor = AprilTagProcessor.easyCreateWithDefaults();
 
-        vision = VisionPortal.easyCreateWithDefaults(
-                hardwareMap.get(WebcamName.class, "ov9281"),
-                aprilTagProcessor);
+        vision = new VisionPortal.Builder()
+                .setCamera(webCam)
+                .addProcessor(aprilTagProcessor)
+                .enableLiveView(true)
+                .build();
 
         telemetry.addLine("AprilTag OpMode initialized");
         telemetry.update();
     }
 
+    @Override
+    public void init_loop(){
+        telemetry.addData("Vision Portal Status", vision.getCameraState());
+    }
     @Override
     public void loop() {
         List<AprilTagDetection> detections = aprilTagProcessor.getDetections();

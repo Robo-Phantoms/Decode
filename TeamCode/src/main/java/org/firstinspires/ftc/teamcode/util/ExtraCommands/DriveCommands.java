@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.util.ExtraCommands;
 
 import dev.nextftc.hardware.controllable.Controllable;
 
@@ -6,7 +6,7 @@ import dev.nextftc.hardware.controllable.Controllable;
  * @Param Use this class for extra commands that can't be put in subsystems
  */
 
-public class ExtraCommands {
+public class DriveCommands {
     public static double POWER = 0.55;
 
     public static void strafeLeft(Controllable lfMotor, Controllable rfMotor, Controllable lbMotor, Controllable rbMotor) {
