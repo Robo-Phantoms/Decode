@@ -1,47 +1,26 @@
 package org.firstinspires.ftc.teamcode.util.roadrunner;
 
 import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.*;
-import com.acmerobotics.roadrunner.AngularVelConstraint;
-import com.acmerobotics.roadrunner.DualNum;
-import com.acmerobotics.roadrunner.HolonomicController;
-import com.acmerobotics.roadrunner.MecanumKinematics;
-import com.acmerobotics.roadrunner.MinVelConstraint;
-import com.acmerobotics.roadrunner.MotorFeedforward;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Pose2dDual;
-import com.acmerobotics.roadrunner.ProfileAccelConstraint;
-import com.acmerobotics.roadrunner.Time;
-import com.acmerobotics.roadrunner.TimeTrajectory;
-import com.acmerobotics.roadrunner.TimeTurn;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TurnConstraints;
-import com.acmerobotics.roadrunner.VelConstraint;
-import com.acmerobotics.roadrunner.ftc.DownsampledWriter;
-import com.acmerobotics.roadrunner.ftc.Encoder;
-import com.acmerobotics.roadrunner.ftc.FlightRecorder;
-import com.acmerobotics.roadrunner.ftc.LazyHardwareMapImu;
-import com.acmerobotics.roadrunner.ftc.LazyImu;
-import com.acmerobotics.roadrunner.ftc.LynxFirmware;
-import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
-import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
-import com.acmerobotics.roadrunner.ftc.RawEncoder;
+import com.acmerobotics.roadrunner.Actions;
+import com.acmerobotics.roadrunner.ftc.*;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
-
+import com.qualcomm.robotcore.hardware.*;
+import dev.nextftc.extensions.roadrunner.FollowTrajectory;
+import dev.nextftc.extensions.roadrunner.NextFTCMecanumDrive;
+import dev.nextftc.extensions.roadrunner.TrajectoryCommandBuilder;
+import dev.nextftc.extensions.roadrunner.Turn;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.util.roadrunner.messages.*;
+import org.firstinspires.ftc.teamcode.util.roadrunner.messages.DriveCommandMessage;
+import org.firstinspires.ftc.teamcode.util.roadrunner.messages.MecanumCommandMessage;
+import org.firstinspires.ftc.teamcode.util.roadrunner.messages.MecanumLocalizerInputsMessage;
+import org.firstinspires.ftc.teamcode.util.roadrunner.messages.PoseMessage;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.Math;
 import java.util.Arrays;
@@ -49,7 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Config
-public final class MecanumDrive {
+public final class MecanumDrive extends NextFTCMecanumDrive {
     public static class Params {
         // IMU orientation
         // TODO: fill in these values based on
@@ -448,14 +427,14 @@ public final class MecanumDrive {
     public PoseVelocity2d updatePoseEstimate() {
         PoseVelocity2d vel = localizer.update();
         poseHistory.add(localizer.getPose());
-        
+
         while (poseHistory.size() > 100) {
             poseHistory.removeFirst();
         }
 
         estimatedPoseWriter.write(new PoseMessage(localizer.getPose()));
-        
-        
+
+
         return vel;
     }
 
@@ -480,6 +459,61 @@ public final class MecanumDrive {
         return new TrajectoryActionBuilder(
                 TurnAction::new,
                 FollowTrajectoryAction::new,
+                new TrajectoryBuilderParams(
+                        1e-6,
+                        new ProfileParams(
+                                0.25, 0.1, 1e-2
+                        )
+                ),
+                beginPose, 0.0,
+                defaultTurnConstraints,
+                defaultVelConstraint, defaultAccelConstraint
+        );
+    }
+
+    HolonomicController controller = new HolonomicController(
+            PARAMS.axialGain, PARAMS.lateralGain, PARAMS.headingGain,
+            PARAMS.axialVelGain, PARAMS.lateralVelGain, PARAMS.headingVelGain
+    );
+
+    @NotNull
+    @Override
+    public HolonomicController getController() {
+        return controller;
+    }
+
+    @NotNull
+    @Override
+    public Pose2d getPose() {
+        return localizer.getPose();
+    }
+
+    @Override
+    public void setDrivePowersFF(@NotNull PoseVelocity2dDual<Time> poseVelocity2dDual) {
+        MecanumKinematics.WheelVelocities<Time> wheelVels = kinematics.inverse(poseVelocity2dDual);
+        double voltage = voltageSensor.getVoltage();
+        final MotorFeedforward feedforward = new MotorFeedforward(PARAMS.kS,
+                PARAMS.kV / PARAMS.inPerTick, PARAMS.kA / PARAMS.inPerTick);
+        double leftFrontPower = feedforward.compute(wheelVels.leftFront) / voltage;
+        double leftBackPower = feedforward.compute(wheelVels.leftBack) / voltage;
+        double rightBackPower = feedforward.compute(wheelVels.rightBack) / voltage;
+        double rightFrontPower = feedforward.compute(wheelVels.rightFront) / voltage;
+        mecanumCommandWriter.write(new MecanumCommandMessage(
+                voltage, leftFrontPower, leftBackPower, rightBackPower, rightFrontPower
+        ));
+
+        leftFront.setPower(feedforward.compute(wheelVels.leftFront) / voltage);
+        leftBack.setPower(feedforward.compute(wheelVels.leftBack) / voltage);
+        rightBack.setPower(feedforward.compute(wheelVels.rightBack) / voltage);
+        rightFront.setPower(feedforward.compute(wheelVels.rightFront) / voltage);
+    }
+
+    @Override
+    @NotNull
+    public TrajectoryCommandBuilder commandBuilder(@NotNull Pose2d beginPose) {
+        return new TrajectoryCommandBuilder(
+                turn -> new Turn(this, turn),
+                traj -> new FollowTrajectory(this, traj),
                 new TrajectoryBuilderParams(
                         1e-6,
                         new ProfileParams(
