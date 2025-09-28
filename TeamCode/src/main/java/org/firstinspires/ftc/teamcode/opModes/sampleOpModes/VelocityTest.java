@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opModes;
+package org.firstinspires.ftc.teamcode.opModes.sampleOpModes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -23,8 +23,8 @@ public class VelocityTest extends NextFTCOpMode {
                 BulkReadComponent.INSTANCE
         );
     }
-    private MotorEx compliantWheelLeft = new MotorEx("left").reversed();
-    private MotorEx compliantWheelRight = new MotorEx("right");
+    private MotorEx compliantWheelLeft = new MotorEx("flywheelLeft").reversed();
+    private MotorEx compliantWheelRight = new MotorEx("flywheelRight");
 
     private MotorGroup Wheels = new MotorGroup(compliantWheelLeft, compliantWheelRight);
     public static double kp, ki, kd;

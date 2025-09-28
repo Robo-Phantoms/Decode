@@ -23,14 +23,17 @@ public class Teleop extends NextFTCOpMode {
     public Teleop(){
         addComponents(
                 BulkReadComponent.INSTANCE,
-                BindingsComponent.INSTANCE,
-                new SubsystemComponent(Intake.INSTANCE));
+                BindingsComponent.INSTANCE
+        );
     }
 
     private MotorEx leftFront = new MotorEx("leftFront");
     private MotorEx rightFront = new MotorEx("rightFront").reversed();
     private MotorEx leftBack = new MotorEx("leftBack");
     private MotorEx rightBack = new MotorEx("rightBack").reversed();
+    private MotorEx flywheelLeft = new MotorEx("flywheelLeft").reversed();//1 is blue
+    private MotorEx flywheelRight = new MotorEx("flywheelRight");// 2 is red
+    private MotorGroup flywheels = new MotorGroup(flywheelLeft, flywheelRight);
     private MotorGroup leftMotors = new MotorGroup(leftFront, leftBack);
     private MotorGroup rightMotors = new MotorGroup(rightFront, rightBack);
 
@@ -55,9 +58,11 @@ public class Teleop extends NextFTCOpMode {
                 .whenTrue(() -> DriveCommands.backward(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> DriveCommands.stop(leftFront, rightFront, leftBack, rightBack));
 
-        Gamepads.gamepad2().rightStickY().inRange(-0.1, 0.1)
-                .whenFalse(() -> Intake.INSTANCE.intakeArtifact(gamepad2.right_stick_y).schedule())
-                .whenTrue(() -> Intake.INSTANCE.stopIntake().schedule()
-                );
+    }
+    @Override
+    public void onUpdate(){
+        if(gamepad2.b){
+            flywheels.setPower(1.0);
+        }
     }
 }

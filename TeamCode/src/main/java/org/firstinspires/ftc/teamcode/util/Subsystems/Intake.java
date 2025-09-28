@@ -13,6 +13,9 @@ public class Intake implements Subsystem {
     public Command intakeArtifact(float power){
         return new SetPower(rightIntake, power);
     }
+    public Command intakeArtifact(double power){
+        return new SetPower(rightIntake, power);
+    }
     public Command stopIntake(){
         return new SetPower(rightIntake, 0.0);
     }
