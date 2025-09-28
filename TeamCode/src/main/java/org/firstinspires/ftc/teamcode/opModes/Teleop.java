@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import dev.nextftc.bindings.Button;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -12,6 +13,8 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.driving.DifferentialTankDriverControlled;
 import dev.nextftc.hardware.impl.MotorEx;
+import static dev.nextftc.bindings.Bindings.*;
+
 
 import org.firstinspires.ftc.teamcode.util.ExtraCommands.*;
 import org.firstinspires.ftc.teamcode.util.Subsystems.*;
@@ -42,27 +45,23 @@ public class Teleop extends NextFTCOpMode {
         Command driverControlled = new DifferentialTankDriverControlled(leftMotors, rightMotors, Gamepads.gamepad1().leftStickY(), Gamepads.gamepad1().rightStickY());
         driverControlled.schedule();
 
-        Gamepads.gamepad1().leftBumper()
+        button(() -> gamepad1.left_bumper)
                 .whenTrue(() -> DriveCommands.strafeLeft(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> DriveCommands.stop(leftFront, rightFront, leftBack, rightBack));
 
-        Gamepads.gamepad1().rightBumper()
+        button(() -> gamepad1.right_bumper)
                 .whenTrue(() -> DriveCommands.strafeRight(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> DriveCommands.stop(leftFront, rightFront, leftBack, rightBack));
 
-        Gamepads.gamepad1().y()
+        button(() -> gamepad1.y)
                 .whenTrue(() -> DriveCommands.forward(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> DriveCommands.stop(leftFront, rightFront, leftBack, rightBack));
 
-        Gamepads.gamepad1().a()
+        button(()  -> gamepad1.a)
                 .whenTrue(() -> DriveCommands.backward(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> DriveCommands.stop(leftFront, rightFront, leftBack, rightBack));
 
-    }
-    @Override
-    public void onUpdate(){
-        if(gamepad2.b){
-            flywheels.setPower(1.0);
-        }
+        button(() -> gamepad2.b).whenTrue(() -> flywheels.setPower(0.7));
     }
 }
+
