@@ -23,10 +23,10 @@ public class VelocityTest extends NextFTCOpMode {
                 BulkReadComponent.INSTANCE
         );
     }
-    private MotorEx compliantWheelLeft = new MotorEx("flywheelLeft").reversed();
-    private MotorEx compliantWheelRight = new MotorEx("flywheelRight");
+    private MotorEx flywheelLeft = new MotorEx("flywheelLeft").reversed();
+    private MotorEx flywheelRight = new MotorEx("flywheelRight");
 
-    private MotorGroup Wheels = new MotorGroup(compliantWheelLeft, compliantWheelRight);
+    private MotorGroup flywheels = new MotorGroup(flywheelLeft, flywheelRight);
     public static double kp, ki, kd;
     public static double kv, ka, ks;
     public static double targetVel;
@@ -42,12 +42,12 @@ public class VelocityTest extends NextFTCOpMode {
 
     @Override
     public void onUpdate(){
-        KineticState currentState = new KineticState(Wheels.getCurrentPosition(), Wheels.getVelocity());
+        KineticState currentState = new KineticState(flywheels.getCurrentPosition(), flywheels.getVelocity());
         double power = controller.calculate(currentState);
-        Wheels.setPower(power);
+        flywheels.setPower(power);
 
-        ActiveOpMode.telemetry().addData("currentPos", Wheels.getCurrentPosition());
-        ActiveOpMode.telemetry().addData("currentVel", Wheels.getVelocity());
+        ActiveOpMode.telemetry().addData("currentPos", flywheels.getCurrentPosition());
+        ActiveOpMode.telemetry().addData("currentVel", flywheels.getVelocity());
         ActiveOpMode.telemetry().addData("power", power);
         ActiveOpMode.telemetry().update();
 

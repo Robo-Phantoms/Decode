@@ -2,8 +2,7 @@ package org.firstinspires.ftc.teamcode.opModes;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import dev.nextftc.bindings.Button;
+import dev.nextftc.bindings.Variable;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -26,7 +25,8 @@ public class Teleop extends NextFTCOpMode {
     public Teleop(){
         addComponents(
                 BulkReadComponent.INSTANCE,
-                BindingsComponent.INSTANCE
+                BindingsComponent.INSTANCE,
+                new SubsystemComponent(Intake.INSTANCE, Outtake.INSTANCE)
         );
     }
 
@@ -34,9 +34,6 @@ public class Teleop extends NextFTCOpMode {
     private MotorEx rightFront = new MotorEx("rightFront").reversed();
     private MotorEx leftBack = new MotorEx("leftBack");
     private MotorEx rightBack = new MotorEx("rightBack").reversed();
-    private MotorEx flywheelLeft = new MotorEx("flywheelLeft").reversed();//1 is blue
-    private MotorEx flywheelRight = new MotorEx("flywheelRight");// 2 is red
-    private MotorGroup flywheels = new MotorGroup(flywheelLeft, flywheelRight);
     private MotorGroup leftMotors = new MotorGroup(leftFront, leftBack);
     private MotorGroup rightMotors = new MotorGroup(rightFront, rightBack);
 
@@ -61,7 +58,13 @@ public class Teleop extends NextFTCOpMode {
                 .whenTrue(() -> DriveCommands.backward(leftFront, rightFront, leftBack, rightBack))
                 .whenBecomesFalse(() -> DriveCommands.stop(leftFront, rightFront, leftBack, rightBack));
 
-        button(() -> gamepad2.b).whenTrue(() -> flywheels.setPower(0.7));
+        range(() -> gamepad2.right_stick_y).inRange(-0.1, 0.1)
+                .whenFalse(() -> Intake.INSTANCE.intakeArtifact(gamepad2.right_stick_y))
+                .whenTrue(() -> Intake.INSTANCE.stopIntake());
+
+        button(() -> gamepad2.b)
+                .toggleOnBecomesTrue()
+                .whenBecomesTrue(Outtake.INSTANCE.shootArtifact)
+                .whenFalse(Outtake.INSTANCE.stopShooting);
     }
 }
-
